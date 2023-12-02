@@ -40,9 +40,7 @@ object Puzzle2 {
       }
     }
 
-    minCounts.foreach((p: (String, Int)) => {
-      power *= p._2
-    })
+    minCounts.values.foreach((count: Int) => power *= count)
     return power
   }
 
