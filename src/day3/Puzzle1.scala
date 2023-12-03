@@ -63,8 +63,8 @@ object Puzzle1 {
     var y: Int = 0
     var x: Int = 0
 
-    while (y < schematic.length) {
-      while (x < schematic(y).length) {
+    while (y < height) {
+      while (x < width) {
         val c: Char = schematic(y)(x)
         if ('0' <= c && c <= '9') {
           val number: String = getNumber(x, y)
