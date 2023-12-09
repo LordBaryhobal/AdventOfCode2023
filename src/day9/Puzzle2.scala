@@ -2,7 +2,7 @@ package day9
 
 import scala.io.{BufferedSource, Source}
 
-object Puzzle1 {
+object Puzzle2 {
   var series: Array[Series] = Array.empty
 
   def loadInput(path: String): Unit = {
@@ -25,7 +25,7 @@ object Puzzle1 {
 
     for (s: Series <- series) {
       s.computeDiffs()
-      solution += s.extrapolate()
+      solution += s.reverseExtrapolate()
     }
 
     return solution

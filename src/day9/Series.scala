@@ -27,4 +27,13 @@ class Series {
     }
     return values(0).last
   }
+
+  def reverseExtrapolate(): Int = {
+    val len: Int = values(0).length
+    values.last(values.last.length-1) = 0
+    for (i: Int <- values.length-2 to 0 by -1) {
+      values(i)(len-i-1) = values(i)(0) - values(i+1)(len-i-2)
+    }
+    return values(0).last
+  }
 }
