@@ -66,23 +66,24 @@ object Puzzle2 {
     println("Painted path neighbours")
 
     var newZones: Array[Array[Int]] = Array.ofDim(height, width)
-    var filled: Boolean = false
+    var changed: Boolean = true
     var exteriorZone: Int = 0
 
     do {
-      filled = true
+      changed = false
       newZones = copyZones()
       for (y: Int <- 0 until height) {
         for (x: Int <- 0 until width) {
-          if (zones(y)(x) == 0 && !path.contains((x, y))) {
-            filled = false
-            fillTile(x, y, newZones)
+          if (zones(y)(x) != 0) {
+            if (floodTile(x, y, newZones, path)) {
+              changed = true
+            }
           }
         }
       }
       zones = newZones
-    } while (!filled)
-    println("Filled zones")
+    } while (changed)
+    println("Flooded zones")
 
     for (y: Int <- 0 until height) {
       for (x: Int <- 0 until width) {
@@ -106,20 +107,19 @@ object Puzzle2 {
     return area
   }
 
-  def fillTile(x: Int, y: Int, newZones: Array[Array[Int]]): Unit = {
-    var zone: Int = 0
-
+  def floodTile(x: Int, y: Int, newZones: Array[Array[Int]], path: ArrayBuffer[(Int, Int)]): Boolean = {
+    var changed: Boolean = false
     for ((dx: Int, dy: Int) <- Walker.OFFSETS) {
       val x2: Int = x + dx
       val y2: Int = y + dy
       if (0 <= x2 && x2 < width && 0 <= y2 && y2 < height) {
-        if (zones(y2)(x2) != 0) {
-          zone = zones(y2)(x2)
+        if (zones(y2)(x2) == 0 && !path.contains((x2, y2))) {
+          newZones(y2)(x2) = zones(y)(x)
+          changed = true
         }
       }
     }
-
-    newZones(y)(x) = zone
+    return changed
   }
 
   def copyZones(): Array[Array[Int]] = {
