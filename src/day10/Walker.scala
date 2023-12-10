@@ -1,15 +1,11 @@
 package day10
 
 class Walker {
-  private var x: Int = 0
-  private var y: Int = 0
-  private var lastX: Int = -1
-  private var lastY: Int = -1
-  private var distance: Int = 0
-
-  val OFFSETS: Array[(Int, Int)] = Array(
-    (1, 0), (0, 1), (-1, 0), (0, -1)
-  )
+  protected var x: Int = 0
+  protected var y: Int = 0
+  protected var lastX: Int = -1
+  protected var lastY: Int = -1
+  protected var distance: Int = 0
 
   def this(startX: Int, startY: Int) = {
     this()
@@ -41,7 +37,7 @@ class Walker {
 
   private def getNextPos(grid: Array[Array[Byte]], width: Int, height: Int): (Int, Int) = {
     val curTile: Byte = grid(y)(x)
-    for (((dx: Int, dy: Int), i: Int) <- OFFSETS.zipWithIndex) {
+    for (((dx: Int, dy: Int), i: Int) <- Walker.OFFSETS.zipWithIndex) {
       val x2: Int = x + dx
       val y2: Int = y + dy
       if (x2 != lastX || y2 != lastY) {
@@ -57,4 +53,10 @@ class Walker {
 
     throw new Exception("Dead-end path")
   }
+}
+
+object Walker {
+  val OFFSETS: Array[(Int, Int)] = Array(
+    (1, 0), (0, 1), (-1, 0), (0, -1)
+  )
 }
