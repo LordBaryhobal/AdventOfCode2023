@@ -1,5 +1,7 @@
 package day10
 
+import util.Ansi
+
 import scala.collection.immutable.HashMap
 import scala.collection.mutable.ArrayBuffer
 import scala.io.{BufferedSource, Source}
@@ -20,10 +22,33 @@ object Puzzle2 {
     'S' -> 15
   )
 
+  val TILE_CHARS: Map[Int, Char] = HashMap(
+    10 -> '│',
+    5 -> '─',
+    9 -> '└',
+    12 -> '┘',
+    6 -> '┐',
+    3 -> '┌',
+    0 -> ' ',
+    15 -> '█'
+  )
+
+  val TILE_CHARS_BOLD: Map[Int, Char] = HashMap(
+    10 -> '┃',
+    5 -> '━',
+    9 -> '┗',
+    12 -> '┛',
+    6 -> '┓',
+    3 -> '┏',
+    0 -> ' ',
+    15 -> '█'
+  )
+
   var height: Int = 0
   var width: Int = 0
   var startX: Int = 0
   var startY: Int = 0
+  var path: ArrayBuffer[(Int, Int)] = new ArrayBuffer()
 
   def loadInput(path: String): Unit = {
     val source: BufferedSource = Source.fromFile(path)
@@ -47,8 +72,30 @@ object Puzzle2 {
     source.close()
   }
 
+  def display(): Unit = {
+    for (y: Int <- 0 until height) {
+      for (x: Int <- 0 until width) {
+        val tile: Byte = grid(y)(x)
+        val zone: Int = zones(y)(x)
+        if (zone == 1) {
+          print(Ansi.BG_RGB(163, 61, 61))
+        } else if (zone == 2) {
+          print(Ansi.BG_RGB(77, 163, 61))
+        }
+        if (path.contains((x, y))) {
+          print(Ansi.BOLD)
+          print(TILE_CHARS_BOLD(tile))
+        } else {
+          print(TILE_CHARS(tile))
+        }
+        print(Ansi.CLEAR)
+      }
+      println()
+    }
+  }
+
   def calculateArea(): Int = {
-    val path: ArrayBuffer[(Int, Int)] = new ArrayBuffer()
+    path = new ArrayBuffer()
     path.addOne((startX, startY))
 
     val walker: Walker = new Walker(startX, startY)
@@ -143,5 +190,6 @@ object Puzzle2 {
   def main(args: Array[String]): Unit = {
     val solution: Int = solve("./res/day10/input1.txt")
     println(solution)
+    display()
   }
 }
